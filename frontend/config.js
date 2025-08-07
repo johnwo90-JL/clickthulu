@@ -1,0 +1,1 @@
+export const base_url = '/clickhulu'; // Default base URL
