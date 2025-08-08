@@ -28,7 +28,6 @@ const RegisterLogin = () => {
       {!login && (
         <div className={styles.LoginCard}>
           <div>
-            {/* No way to return to login screen */}
             <h2>Register</h2>
             <form>
               <p>Full Name:</p>
