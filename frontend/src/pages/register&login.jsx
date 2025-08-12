@@ -11,7 +11,7 @@ const RegisterLogin = () => {
         <div className={styles.LoginCard}>
           <h2>Login</h2>
           <div>
-            <form>
+            <form className={styles.ForceLeft}>
               <p>Username:</p>
               <input type="text" />
               <p>Password:</p>
@@ -27,25 +27,23 @@ const RegisterLogin = () => {
       {/* Register */}
       {!login && (
         <div className={styles.LoginCard}>
-          <div>
-            <h2>Register</h2>
-            <form>
-              <p>Full Name:</p>
-              <input type="text" />
-              <p>Email:</p>
-              <input type="email" />
-              <p>Username:</p>
-              <input type="text" />
-              <p>Password:</p>
-              <input type="password" />
-              <p>Confirm Password:</p>
-              <input type="password" />
-            </form>
-            <p onClick={() => setLogin(!login)} className={styles.FakeLink}>
-              Already have an Account?
-            </p>
-            <button>Register</button>
-          </div>
+          <h2>Register</h2>
+          <form className={styles.ForceLeft}>
+            <p>Full Name:</p>
+            <input type="text" />
+            <p>Email:</p>
+            <input type="email" />
+            <p>Username:</p>
+            <input type="text" />
+            <p>Password:</p>
+            <input type="password" />
+            <p>Confirm Password:</p>
+            <input type="password" />
+          </form>
+          <p onClick={() => setLogin(!login)} className={styles.FakeLink}>
+            Already have an Account?
+          </p>
+          <button>Register</button>
         </div>
       )}
     </>

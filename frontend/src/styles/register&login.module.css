@@ -13,13 +13,30 @@ body {
   align-items: center;
 }
 
+p,
+input {
+  align-items: start;
+  width: 100%;
+}
+
 .LoginCard {
   background-color: lightgrey;
   width: 40vw;
-  padding: 4px 40px;
+  padding: 10px;
+  margin: 10% 0%;
 }
 
 .FakeLink {
   color: blue;
   cursor: pointer;
+  align-items: center;
+}
+
+.FakeLink:hover {
+  text-decoration: underline;
+}
+
+.ForceLeft {
+  align-items: start;
+  width: 100%;
 }
