@@ -24,6 +24,7 @@ input {
   width: 40vw;
   padding: 10px;
   margin: 10% 0%;
+  align-items: center;
 }
 
 .FakeLink {
@@ -39,4 +40,15 @@ input {
 .ForceLeft {
   align-items: start;
   width: 100%;
+}
+
+.LoginButton {
+  color: white;
+  background-color: #438b88;
+  font-size: 100%;
+  border-radius: 10px;
+  width: 100px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
 }
