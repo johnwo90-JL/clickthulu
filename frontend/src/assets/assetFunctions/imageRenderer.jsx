@@ -9,13 +9,14 @@ const ImagePlaceholder = ({ width="fitContent", height="fitContent", icon="📷"
     );
 };
 
-const ImageRenderer = ({ src, alt="Image", width="fitContent", height="fitContent", fallbackIcon="📷", fallbackText="Image Placeholder" }) => {
+const ImageRenderer = ({ src, alt="Image", className, width="fitContent", height="fitContent", fallbackIcon="📷", fallbackText="Image Placeholder" }) => {
+    const imageClassName = className ? `${styles.image} ${className}` : styles.image;
     if (src) {
         return (
             <img
                 src={src}
                 alt={alt}
-                className={styles.image}
+                className={imageClassName}
                 style={{ width, height, objectFit: "cover" }}
             />
         );
