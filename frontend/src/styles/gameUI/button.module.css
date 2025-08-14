@@ -1,0 +1,31 @@
+/* Clicker Styles */
+.clickerContainer {
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
+}
+.headText {
+    margin: 0.8rem 0;
+    text-align: center;
+}
+.clickButton {
+    padding: 8px;
+    border: 2px solid black;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.clickButton:hover {
+    background-color: lightgray;
+    transform: scale(1.01);
+    transition: transform 0.1s ease-in-out;
+}
+.clickButton:active {
+    transform: scale(0.98);
+    transition: transform 0.02s ease-in-out;
+}
+
+/* Button Styles */
+.button {
+    margin: 0;
+}

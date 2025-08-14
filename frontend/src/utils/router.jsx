@@ -7,8 +7,8 @@ import { useEffect } from "react";
 
 import { base_url as base } from "../../config";
 import App from "../App.jsx";
-import Home from "../pages/Home";
-import Game from "../pages/Game";
+import Home from "../pages/home";
+import Game from "../pages/game";
 import RegisterAndLogin from "../pages/register&login";
 
 const router = createBrowserRouter(

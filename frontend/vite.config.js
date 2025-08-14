@@ -6,4 +6,14 @@ import { base_url as base } from './config.js'
 export default defineConfig({
   plugins: [react()],
   base: base,
+  resolve: {
+    alias: {
+      "@components": "/src/components",
+      "@pages": "/src/pages",
+      "@styles": "/src/styles",
+      "@hooks": "/src/hooks",
+      "@utils": "/src/utils",
+      "@assets": "/src/assets",
+    }
+  }
 })

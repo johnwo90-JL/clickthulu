@@ -1,0 +1,20 @@
+.imagePlaceholder {
+    background-color: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
+    gap: 10px;
+    border-radius: 4px;
+}
+
+.imagePlaceholder span {
+    font-size: 24px;
+}
+
+.imagePlaceholder p {
+    margin: 0;
+    text-align: center;
+}
