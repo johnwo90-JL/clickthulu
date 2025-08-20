@@ -1,4 +1,14 @@
-
+/* Container for alle kortene på siden */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 44px;
+  justify-content: space-evenly;
+  margin-top: 40px;
+  background: #181818;
+  min-height: 100vh;
+  padding-bottom: 40px;
+}
 
 .captcha-card.card {
   width: 150px;

@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import styles from "../styles/card.module.css";
+import { base_url } from "../../config";
 
 const cardNamesRaw = [
   "Demon_common.png",
@@ -72,7 +73,7 @@ function Card({ name }) {
       onMouseLeave={handleMouseLeave}
     >
       <img
-        src={`/${name}`}
+        src={`${base_url}/${name}`}
         alt={name.replace(".png", "")}
         width={150}
         height={225}
@@ -84,15 +85,7 @@ function Card({ name }) {
 
 function Cards() {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "44px",
-        justifyContent: "center",
-        marginTop: "40px",
-      }}
-    >
+    <div className={styles.cardsContainer}>
       {cardNames.map((name) => (
         <Card name={name} key={name} />
       ))}
