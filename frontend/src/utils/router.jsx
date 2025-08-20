@@ -10,6 +10,8 @@ import App from "../App.jsx";
 import Home from "../pages/home";
 import Game from "../pages/game";
 import RegisterAndLogin from "../pages/register&login";
+import Cards from "../pages/cards.jsx";
+import Gambling from "../pages/gambling";
 
 const router = createBrowserRouter(
   [
@@ -32,6 +34,14 @@ const router = createBrowserRouter(
         {
           path: "game", // path for the game page
           element: <Game />,
+        },
+        {
+          path: "cards", // path for the cards page
+          element: <Cards />,
+        },
+        {
+          path: "gambling", // path for the gambling page
+          element: <Gambling />,
         },
       ],
     },

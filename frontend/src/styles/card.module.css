@@ -1,0 +1,68 @@
+
+
+.captcha-card.card {
+  width: 150px;
+  height: 225px;
+  border-radius: 10px !important;
+  overflow: hidden;
+  transition: box-shadow 0.25s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.captcha-card.card img {
+  border-radius: 10px !important;
+}
+
+/* Glow on hover for rarity */
+.captcha-card.card.common:hover {
+  box-shadow: 0 0 16px 4px #fff, 5px 3px rgb(217 220 242 / 75%);
+}
+.captcha-card.card.uncommon:hover {
+  box-shadow: 0 0 16px 4px #a0522d, 10px 6px rgb(44 217 255 / 50%);
+}
+.captcha-card.card.epic:hover {
+  box-shadow: 0 0 24px 8px #8e24aa, 15px 9px rgb(126 255 178 / 25%);
+}
+
+/* Glow animation for rarity */
+.captcha-card.card.common {
+  animation: glowing-common 1.5s ease-in-out infinite alternate;
+}
+.captcha-card.card.uncommon {
+  animation: glowing-uncommon 1.5s ease-in-out infinite alternate;
+}
+.captcha-card.card.epic {
+  animation: glowing-epic 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes glowing-common {
+  0% {
+    box-shadow: 0 0 5px #fff, 0 0 15px #fff;
+  }
+  100% {
+    box-shadow: 0 0 20px #fff, 0 0 40px #fff;
+  }
+}
+@keyframes glowing-uncommon {
+  0% {
+    box-shadow: 0 0 5px #a0522d, 0 0 15px #a0522d;
+  }
+  100% {
+    box-shadow: 0 0 20px #a0522d, 0 0 40px #a0522d;
+  }
+}
+@keyframes glowing-epic {
+  0% {
+    box-shadow: 0 0 5px #8e24aa, 0 0 15px #8e24aa;
+  }
+  100% {
+    box-shadow: 0 0 20px #8e24aa, 0 0 40px #8e24aa;
+  }
+}
