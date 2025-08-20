@@ -1,5 +1,5 @@
 /* Container for alle kortene på siden */
-.cards-container {
+.cardsContainer {
   display: flex;
   flex-wrap: wrap;
   gap: 44px;
@@ -10,7 +10,7 @@
   padding-bottom: 40px;
 }
 
-.captcha-card.card {
+.card {
   width: 150px;
   height: 225px;
   border-radius: 10px !important;
@@ -26,29 +26,29 @@
   transform-style: preserve-3d;
 }
 
-.captcha-card.card img {
+.card img {
   border-radius: 10px !important;
 }
 
 /* Glow on hover for rarity */
-.captcha-card.card.common:hover {
+.common:hover {
   box-shadow: 0 0 16px 4px #fff, 5px 3px rgb(217 220 242 / 75%);
 }
-.captcha-card.card.uncommon:hover {
+.uncommon:hover {
   box-shadow: 0 0 16px 4px #a0522d, 10px 6px rgb(44 217 255 / 50%);
 }
-.captcha-card.card.epic:hover {
+.epic:hover {
   box-shadow: 0 0 24px 8px #8e24aa, 15px 9px rgb(126 255 178 / 25%);
 }
 
 /* Glow animation for rarity */
-.captcha-card.card.common {
+.common {
   animation: glowing-common 1.5s ease-in-out infinite alternate;
 }
-.captcha-card.card.uncommon {
+.uncommon {
   animation: glowing-uncommon 1.5s ease-in-out infinite alternate;
 }
-.captcha-card.card.epic {
+.epic {
   animation: glowing-epic 1.5s ease-in-out infinite alternate;
 }
 
