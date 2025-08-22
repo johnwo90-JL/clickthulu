@@ -27,10 +27,10 @@ const RegisterLogin = () => {
         <div className={styles.LoginCard}>
           <h2>Register</h2>
           <form className={styles.ForceLeft}>
-            <p>Full Name:</p>
+            {/* <p>Full Name:</p>
             <input type="text" className={styles.ForceWide} />
             <p>Email:</p>
-            <input type="email" className={styles.ForceWide} />
+            <input type="email" className={styles.ForceWide} /> */}
             <p>Username:</p>
             <input type="text" className={styles.ForceWide} />
             <p>Password:</p>
