@@ -12,9 +12,9 @@ const RegisterLogin = () => {
           <h2>Login</h2>
           <form className={styles.ForceLeft}>
             <p>Username:</p>
-            <input type="text" />
+            <input type="text" className={styles.ForceWide} />
             <p>Password:</p>
-            <input type="password" />
+            <input type="password" className={styles.ForceWide} />
           </form>
           <p onClick={() => setLogin(!login)} className={styles.FakeLink}>
             Don't have an account?
@@ -28,15 +28,15 @@ const RegisterLogin = () => {
           <h2>Register</h2>
           <form className={styles.ForceLeft}>
             <p>Full Name:</p>
-            <input type="text" />
+            <input type="text" className={styles.ForceWide} />
             <p>Email:</p>
-            <input type="email" />
+            <input type="email" className={styles.ForceWide} />
             <p>Username:</p>
-            <input type="text" />
+            <input type="text" className={styles.ForceWide} />
             <p>Password:</p>
-            <input type="password" />
+            <input type="password" className={styles.ForceWide} />
             <p>Confirm Password:</p>
-            <input type="password" />
+            <input type="password" className={styles.ForceWide} />
           </form>
           <p onClick={() => setLogin(!login)} className={styles.FakeLink}>
             Already have an Account?
