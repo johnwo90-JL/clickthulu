@@ -12,6 +12,7 @@ import Game from "../pages/game";
 import RegisterAndLogin from "../pages/register&login";
 import Cards from "../pages/cards.jsx";
 import Gambling from "../pages/gambling";
+import TempUpgrades from "../pages/tempug.jsx";
 
 const router = createBrowserRouter(
   [
@@ -38,6 +39,10 @@ const router = createBrowserRouter(
         {
           path: "cards", // path for the cards page
           element: <Cards />,
+        },
+        {
+          path: "tempug", // Path for temp upgrades
+          element: <TempUpgrades />,
         },
         {
           path: "gambling", // path for the gambling page

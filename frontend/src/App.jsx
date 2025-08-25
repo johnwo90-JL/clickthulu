@@ -9,7 +9,12 @@ function App() {
         <Link to="/cards" style={{ marginRight: "16px" }}>
           Kort
         </Link>
-        <Link to="/gambling">Kiste</Link>
+        <Link to="/gambling" style={{ marginRight: "16px" }}>
+          Kiste
+        </Link>
+        <Link to="/tempug">
+          Upgrades
+        </Link>
       </nav>
       <Outlet />
     </>
@@ -17,3 +22,4 @@ function App() {
 }
 
 export default App;
+

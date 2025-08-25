@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/gambling.module.css";
+import styles from "../styles/gambling.module.css";
 import { base_url } from "../../config";
 
 function Gambling() {
@@ -11,23 +11,24 @@ function Gambling() {
   };
 
   return (
-    <div className="crate-container">
-      <h2>Åpne en kiste!</h2>
-      <div className="crate-animation">
+    <div className={styles.crateContainer}>
+      <div className={styles.crateAnimation}>
         <img
+          className={`${styles.crateImg} ${
+            isOpen ? styles.open : styles.closed
+          }`}
           src={
             isOpen
               ? `${base_url}/Chest_open.png`
               : `${base_url}/Chest_closed.png`
           }
           alt={isOpen ? "Åpen kiste" : "Lukket kiste"}
-          className={`crate-img ${isOpen ? "open" : "closed"}`}
           width={180}
           height={180}
         />
       </div>
       {!isOpen && (
-        <button className="crate-open-btn" onClick={handleOpen}>
+        <button className={styles.crateOpenBtn} onClick={handleOpen}>
           Åpne kiste
         </button>
       )}

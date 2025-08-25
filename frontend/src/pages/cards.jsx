@@ -35,7 +35,7 @@ function Card({ name }) {
   // Bruker CSS-modul-klasser
   return (
     <div
-      className={`${styles.card} ${styles[rarity]}`}
+      className={`${styles.cardItem} ${styles[rarity]}`}
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
