@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "../styles/tempupgrades.module.css";
+import { base_url } from "../../config";
 
 const upgrades = [
   { name: "VFT", description: "Upgrade VFT", img: "Vft.png" },
@@ -20,7 +21,7 @@ function TempUpgrades() {
         {upgrades.map((upg, idx) => (
           <li key={idx} className={styles.upgradeItem}>
             <img
-              src={`/${upg.img}`}
+              src={`${base_url}/${upg.img}`}
               alt={upg.name}
               className={styles.upgradeImg}
               width={64}
