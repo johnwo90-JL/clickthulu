@@ -3,7 +3,6 @@ import styles from "../styles/tempupgrades.module.css";
 import { base_url } from "../../config";
 
 const upgrades = [
-  { name: "VFT", description: "Upgrade VFT", img: "Vft.png" },
   { name: "UGF", description: "Upgrade UGF", img: "Ugf.png" },
   { name: "TGF", description: "Upgrade TGF", img: "Tgf.png" },
   { name: "FST", description: "Upgrade FST", img: "Fst.png" },
@@ -11,6 +10,7 @@ const upgrades = [
   { name: "DGF", description: "Upgrade DGF", img: "Dgf.png" },
   { name: "DFE", description: "Upgrade DFE", img: "Dfe.png" },
   { name: "CLS", description: "Upgrade CLS", img: "Cls.png" },
+  { name: "Rne", description: "Rune Upgrade", img: "Rne.png" },
 ];
 
 function TempUpgrades() {

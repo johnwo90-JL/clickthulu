@@ -3,10 +3,12 @@
   flex-direction: column;
   align-items: center;
   margin-top: 60px;
+  position: relative;
 }
 
 .crateAnimation {
   margin: 32px 0;
+  z-index: 2;
 }
 
 .crateBox {
@@ -29,6 +31,7 @@
   cursor: pointer;
   margin-top: 16px;
   transition: background 0.2s;
+  z-index: 2;
 }
 
 .crateOpenBtn:hover {
@@ -45,4 +48,48 @@
 
 .closed {
   transform: scale(1) rotate(0deg);
+}
+
+/* Case opening animation */
+.scrollAnimation {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; /* bredde på "kleshenger" */
+  height: 200px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 5;
+  background: none;
+  border: 2px solid #222;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px #000a;
+}
+
+.cardRow {
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  animation: scroll-cards 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.scrollCard {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px #0006;
+  background: none;
+  width: 120px;
+  height: 180px;
+  object-fit: contain;
+}
+
+/* Juster denne for hvor langt du vil scrolle! */
+@keyframes scroll-cards {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    /* (kortbredde + gap) * (antall kort - synlige kort midt i view) */
+    transform: translateX(-900px); /* juster etter antall kort og bredde */
+  }
 }

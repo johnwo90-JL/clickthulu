@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import styles from "../styles/card.module.css";
 import { base_url } from "../../config";
+import { cardNames } from "../utils/cardList";
 
 function getRarity(name) {
   if (name.includes("epic")) return "epic";
@@ -11,6 +12,11 @@ function getRarity(name) {
 function Card({ name }) {
   const cardRef = useRef(null);
   const rarity = getRarity(name);
+
+  // Lag unik id basert på kortnavnet
+  const cardId = `card-${name
+    .replace(".png", "")
+    .replace(/[^a-zA-Z0-9_-]/g, "")}`;
 
   const handleMouseMove = (e) => {
     const card = cardRef.current;
@@ -32,9 +38,9 @@ function Card({ name }) {
     cardRef.current.style.transform = "";
   };
 
-  // Bruker CSS-modul-klasser
   return (
     <div
+      id={cardId}
       className={`${styles.cardItem} ${styles[rarity]}`}
       ref={cardRef}
       onMouseMove={handleMouseMove}
@@ -52,32 +58,6 @@ function Card({ name }) {
 }
 
 function Cards() {
-  const cardNames = [
-    "Demon_common.png",
-    "Xpboost_common.png",
-    "Doctor_common.png",
-    "Demon_uncommon.png",
-    "Xpboost_uncommon.png",
-    "Doctor_uncommon.png",
-    "Demon_epic.png",
-    "Xpboost_epic.png",
-    "Doctor_epic.png",
-    "Castle_common.png",
-    "Castle_uncommon.png",
-    "Castle_epic.png",
-    "Finger_common.png",
-    "Finger_uncommon.png",
-    "Finger_epic.png",
-    "Wingydemon_common.png",
-    "Wingydemon_uncommon.png",
-    "Wingydemon_epic.png",
-    "Nokken_common.png",
-    "Nokken_uncommon.png",
-    "Nokken_epic.png",
-    "Oldman_common.png",
-    "Oldman_uncommon.png",
-    "Oldman_epic.png",
-  ];
   return (
     <div className={styles.cardsContainer}>
       {cardNames.map((name) => (
