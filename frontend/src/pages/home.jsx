@@ -3,7 +3,7 @@ import styles from "../styles/home.module.css";
 
 const Home = () => {
   return (
-    <>
+    <div className={styles.HomeParent}>
       <div className={styles.Header}>
         <h2>Clickthulu</h2>
       </div>
@@ -16,7 +16,7 @@ const Home = () => {
         </Link>
       </div>
       <div className={styles.Footer}></div>
-    </>
+    </div>
   );
 };
 
