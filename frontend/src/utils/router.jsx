@@ -14,6 +14,7 @@ import Cards from "../pages/cards.jsx";
 import Gambling from "../pages/gambling";
 import TempUpgrades from "../pages/tempug.jsx";
 import BackgroundPage from "../pages/Background.jsx";
+import XPBarTest from "../pages/xpbartest.jsx";
 
 const router = createBrowserRouter(
   [
@@ -52,6 +53,10 @@ const router = createBrowserRouter(
         {
           path: "gambling", // path for the gambling page
           element: <Gambling />,
+        },
+        {
+          path: "xpbartest", // path for XPBar test
+          element: <XPBarTest />,
         },
       ],
     },

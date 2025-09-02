@@ -1,5 +1,4 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
-
 import "./App.css";
 
 function App() {
@@ -18,6 +17,9 @@ function App() {
           </Link>
           <Link to="/tempug" style={{ marginRight: "16px" }}>
             Upgrades
+          </Link>
+          <Link to="/xpbartest" style={{ marginRight: "16px" }}>
+            XPBar Test
           </Link>
           <Link to="/background">Bakgrunn</Link>
         </nav>
