@@ -3,6 +3,8 @@
   background: #222;
   min-height: 100vh;
   padding: 40px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .heading {
@@ -34,8 +36,10 @@
 .upgradeImg {
   display: block;
   margin: 0 auto 8px auto;
-  width: 692px;
-  height: 692px;
+  width: 192px;
+  height: 192px;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: cover;
   background: none;
   border-radius: 0;
@@ -47,4 +51,32 @@
   font-size: 1.3rem;
   font-weight: 600;
   color: #ffd700;
+}
+
+.fireknife {
+  filter: drop-shadow(0 0 10px orange) drop-shadow(0 0 20px red);
+}
+.ugf {
+  filter: drop-shadow(0 0 10px #4caf50);
+}
+.tgf {
+  filter: drop-shadow(0 0 10px #2196f3);
+}
+.fst {
+  filter: drop-shadow(0 0 10px #ffeb3b);
+}
+.dst {
+  filter: drop-shadow(0 0 10px #9c27b0);
+}
+.dgf {
+  filter: drop-shadow(0 0 10px #e91e63);
+}
+.dfe {
+  filter: drop-shadow(0 0 10px #00bcd4);
+}
+.cls {
+  filter: drop-shadow(0 0 10px #fff);
+}
+.rne {
+  filter: drop-shadow(0 0 10px #ff9800);
 }
