@@ -8,12 +8,11 @@ import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./lib/swagger.js";
 import prisma, { disconnectPrisma } from "./lib/prisma.js";
+import indexRouter from "./routes/index.js";
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-import indexRouter from "./routes/index.js";
 
 // Swagger configuration
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
