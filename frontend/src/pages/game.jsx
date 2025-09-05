@@ -2,6 +2,12 @@ import { useState } from "react";
 import styles from "../styles/game.module.css";
 
 import { Clicker, Buttons } from "@components/Game/UI/button.jsx";
+import MissionsGame from "./gameSubpages/missionsGame";
+import StoreGame from "./gameSubpages/storeGame";
+import SettingsGame from "./gameSubpages/settingsGame";
+import PullsGame from "./gameSubpages/pullsGame";
+import WorshippersGame from "./gameSubpages/worshippersGame";
+import UpgradesGame from "./gameSubpages/upgradesGame";
 
 const Game = () => {
   const texts = {
@@ -42,9 +48,30 @@ const Game = () => {
           {/* Left Sidebar */}
           <div className={styles.leftBar}>
             <div className={styles.lTop}>
-              <Buttons label="Missions" className={styles.sideButton} />
-              <Buttons label="Store" className={styles.sideButton} />
-              <Buttons label="Settings" className={styles.sideButton} />
+              <Buttons
+                label="Missions"
+                className={styles.sideButton}
+                onClick={() => {
+                  setGamePage(!gamePage);
+                  setMissionPage(!missionPage);
+                }}
+              />
+              <Buttons
+                label="Store"
+                className={styles.sideButton}
+                onClick={() => {
+                  setGamePage(!gamePage);
+                  setStorePage(!storePage);
+                }}
+              />
+              <Buttons
+                label="Settings"
+                className={styles.sideButton}
+                onClick={() => {
+                  setGamePage(!gamePage);
+                  setSettingsPage(!settingsPage);
+                }}
+              />
             </div>
 
             <div className={styles.lMiddle}>
@@ -72,12 +99,25 @@ const Game = () => {
           {/* Right Sidebar */}
           <div className={styles.rightBar}>
             <div className={styles.rTop}>
-              <Buttons label="Pulls" className={styles.sideButton} />
+              <Buttons
+                label="Pulls"
+                className={styles.sideButton}
+                onClick={() => {
+                  setGamePage(!gamePage);
+                  setPullsPage(!pullsPage);
+                }}
+              />
             </div>
-            <div className={styles.rBottom}></div>
+            <div className={styles.rBottom}>Placeholder</div>
           </div>
         </div>
       )}
+      {missionPage && <MissionsGame />}
+      {storePage && <StoreGame />}
+      {settingsPage && <SettingsGame />}
+      {pullsPage && <PullsGame />}
+      {worshipperPage && <WorshippersGame />}
+      {upgradePage && <UpgradesGame />}
     </>
   );
 };
