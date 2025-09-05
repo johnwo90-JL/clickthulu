@@ -1,4 +1,5 @@
 import { formatStatValue, perSecondForField } from "../../lib/numberScale.js";
+import { evaluateAndAwardAchievements } from "../../lib/achievements.js";
 
 export async function gameClickController(req, res) {
   try {
@@ -10,9 +11,12 @@ export async function gameClickController(req, res) {
         .json({ error: "userId and positive clicks are required" });
     }
 
-    const stats = await req.prisma.gameStats.findFirst({ where: { userId } });
-    if (!stats)
-      return res.status(404).json({ error: "GameStats not found for user" });
+    let stats = await req.prisma.gameStats.findUnique({ where: { userId } });
+    if (!stats) {
+      stats = await req.prisma.gameStats.create({
+        data: { userId, lastClickAt: new Date() },
+      });
+    }
 
     const xpEarned = (stats.xpPerClick || 0) * clicks;
     const updated = await req.prisma.gameStats.update({
@@ -23,6 +27,8 @@ export async function gameClickController(req, res) {
         lastClickAt: new Date(),
       },
     });
+
+    const award = await evaluateAndAwardAchievements(req.prisma, userId);
 
     const xpOut = formatStatValue({
       value: updated.xp,
@@ -37,6 +43,8 @@ export async function gameClickController(req, res) {
     return res.json({
       stats: updated,
       delta: { xp: xpOut, totalClicks: clicksOut },
+      achievements: award.awarded,
+      xpRewarded: award.xpRewarded,
     });
   } catch (err) {
     return res.status(500).json({ error: String(err?.message || err) });

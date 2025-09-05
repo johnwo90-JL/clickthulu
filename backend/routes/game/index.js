@@ -18,7 +18,7 @@ const router = express.Router();
  *     summary: Register user clicks and award XP
  *     tags: [Game]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -42,7 +42,7 @@ router.post("/click", gameClickController);
  *     summary: Apply passive income since last calculation
  *     tags: [Game]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Updated stats and per-second rates

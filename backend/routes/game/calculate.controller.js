@@ -1,4 +1,5 @@
 import { formatStatValue, perSecondForField } from "../../lib/numberScale.js";
+import { evaluateAndAwardAchievements } from "../../lib/achievements.js";
 
 export async function gameCalculateController(req, res) {
   try {
@@ -13,6 +14,8 @@ export async function gameCalculateController(req, res) {
 
     const last = stats.lastCalculatedAt
       ? new Date(stats.lastCalculatedAt)
+      : stats.lastClickAt
+      ? new Date(stats.lastClickAt)
       : now;
 
     const seconds = Math.max(
@@ -21,6 +24,12 @@ export async function gameCalculateController(req, res) {
     );
 
     if (seconds === 0) {
+      if (!stats.lastCalculatedAt) {
+        await req.prisma.gameStats.update({
+          where: { id: stats.id },
+          data: { lastCalculatedAt: now },
+        });
+      }
       const xpOut = formatStatValue({
         value: stats.xp,
         prSecond: perSecondForField(stats, "xp"),
@@ -63,6 +72,9 @@ export async function gameCalculateController(req, res) {
       },
     });
 
+    // Evaluate achievements after applying gains
+    const award = await evaluateAndAwardAchievements(req.prisma, userId);
+
     const xpOut = formatStatValue({
       value: updated.xp,
       prSecond: perSecondForField(updated, "xp"),
@@ -90,6 +102,8 @@ export async function gameCalculateController(req, res) {
         totalClicks: clicksOut.prSecond,
       },
       delta: { xp: xpOut, totalDevotion: devOut, totalClicks: clicksOut },
+      achievements: award.awarded,
+      xpRewarded: award.xpRewarded,
     });
   } catch (err) {
     return res.status(500).json({ error: String(err?.message || err) });
