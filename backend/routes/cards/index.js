@@ -3,6 +3,7 @@ import requireAuth from "../../middleware/auth.js";
 import { listUserCardsController } from "./list.controller.js";
 import { getCardTypeController } from "./get.controller.js";
 import { activateCardController } from "./activate.controller.js";
+import { upsertUserCardController } from "./upsert.controller.js";
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ const router = express.Router();
  *     summary: List user's owned cards
  *     tags: [Cards]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of cards
@@ -34,7 +35,7 @@ router.get("/", requireAuth, listUserCardsController);
  *     summary: Get card type including effects
  *     tags: [Cards]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: cardId
@@ -54,7 +55,7 @@ router.get("/:cardId", requireAuth, getCardTypeController);
  *     summary: Activate a card's effects for the authenticated user
  *     tags: [Cards]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: cardId
@@ -66,5 +67,35 @@ router.get("/:cardId", requireAuth, getCardTypeController);
  *         description: Updated stats and applied effects
  */
 router.post("/:cardId/activate", requireAuth, activateCardController);
+
+/**
+ * @swagger
+ * /api/cards/{cardId}:
+ *   post:
+ *     summary: Add a card to the user's collection (increments count if exists)
+ *     tags: [Cards]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: cardId
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: false
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               amount:
+ *                 type: integer
+ *                 default: 1
+ *     responses:
+ *       200:
+ *         description: The updated/created user card
+ */
+router.post("/:cardId", requireAuth, upsertUserCardController);
 
 export default router;
