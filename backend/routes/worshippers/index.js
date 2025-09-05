@@ -19,7 +19,7 @@ const router = express.Router();
  *     summary: List user's worshippers
  *     tags: [Worshippers]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of worshippers
@@ -33,7 +33,7 @@ router.get("/", requireAuth, listUserWorshippersController);
  *     summary: Get worshipper type including effects
  *     tags: [Worshippers]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id

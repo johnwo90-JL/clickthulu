@@ -1,10 +1,16 @@
 export async function getWorshipperTypeController(req, res) {
   try {
     const { id } = req.params;
-    const type = await req.prisma.worshipperType.findUnique({
+    let type = await req.prisma.worshipperType.findUnique({
       where: { id },
       include: { effects: true },
     });
+    if (!type) {
+      type = await req.prisma.worshipperType.findUnique({
+        where: { typeId: id },
+        include: { effects: true },
+      });
+    }
     if (!type)
       return res.status(404).json({ error: "WorshipperType not found" });
     return res.json({ worshipper: type });
