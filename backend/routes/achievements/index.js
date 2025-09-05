@@ -10,23 +10,29 @@ const router = express.Router();
  *     description: Retrieve all available achievements in the game
  *     tags: [Achievements]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of achievements
  */
 router.get("/", async (req, res) => {
   try {
-    const achievements = await req.prisma.achievement.findMany({
+    const definitions = await req.prisma.achievementDefinition.findMany({
       where: { isActive: true },
-      orderBy: { target: 'asc' },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        target: true,
+        rewards: true,
+        isActive: true,
+      },
     });
-    res.json(achievements);
+    res.json(definitions);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 export default router;
-
-
