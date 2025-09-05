@@ -6,8 +6,6 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-console.log(process.env);
-
 const JWT_SECRET = String(process.env.JWT_SECRET || "dev_secret_change_me");
 const ACCESS_TOKEN_EXPIRES_SECONDS = Number(
   process.env.TOKEN_EXPIRY_INTERVAL || 15 * 60
