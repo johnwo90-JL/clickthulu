@@ -34,7 +34,9 @@ export async function clickHandler(req, res) {
           data: { userId: id, achievementId: achievement.id },
         });
         newAchievements.push(achievement);
-      } catch {}
+      } catch {
+        console.error(`Error creating user achievement: ${achievement.id}`);
+      }
     }
 
     res.json({

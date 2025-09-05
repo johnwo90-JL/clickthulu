@@ -5,8 +5,19 @@ import { getUserByIdHandler } from "./get.controller.js";
 import { createUserHandler } from "./create.controller.js";
 import { clickHandler } from "./click.controller.js";
 import { listUserUpgradesHandler } from "./upgrades.controller.js";
+import { listUserAchievementsHandler } from "./achievements.controller.js";
+import { getMeHandler } from "./me.controller.js";
 
 const router = express.Router();
+// Resolve ":id" == "me" to the authenticated user's id
+function resolveMeParam(req, res, next) {
+  const idParam = req.params?.id;
+  if (idParam !== "me") return next();
+  const userId = req.user?.id;
+  if (!userId) return res.status(401).json({ error: "Unauthorized" });
+  req.params.id = userId;
+  return next();
+}
 
 /**
  * @swagger
@@ -22,7 +33,7 @@ const router = express.Router();
  *     summary: List users
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Array of users
@@ -31,12 +42,43 @@ router.get("/", requireAuth, listUsersHandler);
 
 /**
  * @swagger
+ * /api/users/me:
+ *   get:
+ *     summary: Get the currently authenticated user
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user data
+ *       401:
+ *         description: Unauthorized
+ */
+router.get("/me", requireAuth, getMeHandler);
+
+/**
+ * @swagger
+ * /api/users/me/achievements:
+ *   get:
+ *     summary: List active achievement definitions
+ *     description: Returns all active achievement definitions. Moved from /api/achievements.
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: List of achievements
+ */
+// '/me/achievements' handled via '/:id/achievements' using 'me' alias
+
+/**
+ * @swagger
  * /api/users/{id}:
  *   get:
  *     summary: Get user by ID
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -49,7 +91,7 @@ router.get("/", requireAuth, listUsersHandler);
  *       404:
  *         description: User not found
  */
-router.get("/:id", requireAuth, getUserByIdHandler);
+router.get("/:id", requireAuth, resolveMeParam, getUserByIdHandler);
 
 /**
  * @swagger
@@ -83,7 +125,7 @@ router.post("/", createUserHandler);
  *     summary: Register a user click
  *     tags: [Users]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,7 +138,7 @@ router.post("/", createUserHandler);
  *       401:
  *         description: Unauthorized
  */
-router.post("/:id/click", requireAuth, clickHandler);
+router.post("/:id/click", requireAuth, resolveMeParam, clickHandler);
 
 /**
  * @swagger
@@ -118,6 +160,37 @@ router.post("/:id/click", requireAuth, clickHandler);
  *       401:
  *         description: Unauthorized
  */
-router.get("/:id/upgrades", requireAuth, listUserUpgradesHandler);
+router.get(
+  "/:id/upgrades",
+  requireAuth,
+  resolveMeParam,
+  listUserUpgradesHandler
+);
+
+/**
+ * @swagger
+ * /api/users/{id}/achievements:
+ *   get:
+ *     summary: List a user's unlocked achievements
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: me
+ *     responses:
+ *       200:
+ *         description: Array of user achievements
+ */
+router.get(
+  "/:id/achievements",
+  requireAuth,
+  resolveMeParam,
+  listUserAchievementsHandler
+);
 
 export default router;

@@ -5,13 +5,34 @@ export async function listUsersHandler(req, res) {
         id: true,
         username: true,
         email: true,
-        totalClicks: true,
-        totalCoins: true,
-        currentLevel: true,
         createdAt: true,
+        gameStats: {
+          select: {
+            totalClicks: true,
+            totalDevotion: true,
+            currentLevel: true,
+          },
+        },
       },
     });
-    res.json(users);
+
+    const shaped = users.map((u) => {
+      const stats =
+        Array.isArray(u.gameStats) && u.gameStats.length > 0
+          ? u.gameStats[0]
+          : null;
+      return {
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        createdAt: u.createdAt,
+        totalClicks: stats?.totalClicks ?? 0,
+        totalDevotion: stats?.totalDevotion ?? 0,
+        currentLevel: stats?.currentLevel ?? 1,
+      };
+    });
+
+    res.json(shaped);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

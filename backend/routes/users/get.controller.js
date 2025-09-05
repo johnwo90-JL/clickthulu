@@ -5,9 +5,21 @@ export async function getUserByIdHandler(req, res) {
     const user = await req.prisma.user.findUnique({
       where: { id },
       include: {
-        gameStats: { orderBy: { sessionStart: "desc" }, take: 10 },
-        achievements: { include: { achievement: true } },
-        upgrades: { include: { upgradeBase: true } },
+        gameStats: {
+          orderBy: { updatedAt: "desc" },
+          take: 10,
+        },
+        achievements: {
+          include: { achievement: true },
+        },
+        userWorshippers: {
+          include: { worshipper: true },
+        },
+        userCards: {
+          include: { card: true },
+        },
+        refreshTokens: true,
+        activationLogs: true,
       },
     });
 
