@@ -11,16 +11,26 @@ const router = express.Router();
  *     description: Retrieve all available upgrades in the game
  *     tags: [Upgrades]
  *     security:
- *       - BearerAuth: []
+ *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: List of upgrades
  */
 router.get("/", requireAuth, async (req, res) => {
   try {
-    const upgrades = await req.prisma.upgradeBase.findMany({
+    const upgrades = await req.prisma.upgrade.findMany({
       where: { isActive: true },
-      orderBy: { cost: "asc" },
+      orderBy: { name: "asc" },
+      select: {
+        id: true,
+        name: true,
+        shortName: true,
+        description: true,
+        imgUrl: true,
+        level: true,
+        maxLevel: true,
+        isActive: true,
+      },
     });
     res.json(upgrades);
   } catch (error) {
