@@ -8,6 +8,7 @@ A React + Express monorepo for Clickthulu
 clickthulu/
 ├── frontend/          # React application (Vite + React 19)
 ├── backend/           # Express.js API server
+├── shared/            # Shared interfaces, utilities, etc.
 ├── package.json       # Root package.json with workspace configuration
 └── README.md          # This file
 ```
