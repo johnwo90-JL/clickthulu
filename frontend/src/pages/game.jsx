@@ -1,67 +1,84 @@
+import { useState } from "react";
 import styles from "../styles/game.module.css";
 
-import { Clicker, Buttons } from "@components/Game/UI/button.jsx"
+import { Clicker, Buttons } from "@components/Game/UI/button.jsx";
 
 const Game = () => {
-
   const texts = {
     header: "Clickhulu",
     devotions: "Devotions",
     xp: 2468024, // placeholder for experience points
     bp: 1357913, // placeholder for battlepass points
-  }
+  };
+
+  // Want to keep all game logic inside the game.jsx file/route to simplify data handling.
+  // Makes it easier to keep passive income and active abilities instanced without doing a bunch of backend voodoo to keep shit going when in a different "window".
+  // Also allows for a complete frontend solution with localstorage for testing purposes and "offline" play.
+  // Think this also keeps the entire game in memory so when the slightly longer load time is done it should hopefully be more optimised?
+
+  // Menu Flags for conditional HTML rendering. Try to keep only have one set as "true" at a time.
+  // Game page. Main game window with links to other pages.
+  const [gamePage, setGamePage] = useState(true);
+  // Missions page.
+  const [missionPage, setMissionPage] = useState(false);
+  // Store page.
+  const [storePage, setStorePage] = useState(false);
+  // Settings page.
+  const [settingsPage, setSettingsPage] = useState(false);
+  // Pulls page. For spending pull currency and gambling.
+  const [pullsPage, setPullsPage] = useState(false);
+  // Worshippers page. For managing worshippers.
+  const [worshipperPage, setWorshipperPage] = useState(false);
+  // Upgrades page. For managing upgrades.
+  const [upgradePage, setUpgradePage] = useState(false);
   return (
-    <div className={styles.container}>
-      {/* Header */}
-      <div className={styles.header}>
-        <h3>{texts.header}</h3>
-      </div>
-      {/* Left Sidebar */}
-      <div className={styles.leftBar}>
-        <div className={styles.lTop}>
-          <Buttons label='Missions' className={styles.sideButton}/>
-          <Buttons label='Store' className={styles.sideButton}/>
-          <Buttons label='Settings' className={styles.sideButton}/>
-        </div>
-
-        <div className={styles.lMiddle}>
-          <div className={styles.lmTop}>
-            
+    <>
+      {gamePage && (
+        <div className={styles.container}>
+          {/* Header */}
+          <div className={styles.header}>
+            <h3>{texts.header}</h3>
           </div>
-          <div className={styles.lmBottom}>
-              
+          {/* Left Sidebar */}
+          <div className={styles.leftBar}>
+            <div className={styles.lTop}>
+              <Buttons label="Missions" className={styles.sideButton} />
+              <Buttons label="Store" className={styles.sideButton} />
+              <Buttons label="Settings" className={styles.sideButton} />
+            </div>
+
+            <div className={styles.lMiddle}>
+              <div className={styles.lmTop}></div>
+              <div className={styles.lmBottom}></div>
+            </div>
+
+            <div className={styles.lBottom}></div>
+          </div>
+          {/* Middle Section */}
+          <div className={styles.middle}>
+            <div className={styles.mTop}>
+              <div className={styles.xp}>
+                <p>{texts.xp} XP</p>
+              </div>
+              <div className={styles.bp}>
+                <p>{texts.bp} BP</p>
+              </div>
+            </div>
+            <div className={styles.mBottom}>
+              <h3>{texts.devotions}</h3>
+              <Clicker />
+            </div>
+          </div>
+          {/* Right Sidebar */}
+          <div className={styles.rightBar}>
+            <div className={styles.rTop}>
+              <Buttons label="Pulls" className={styles.sideButton} />
+            </div>
+            <div className={styles.rBottom}></div>
           </div>
         </div>
-
-        <div className={styles.lBottom}>
-
-        </div>
-      </div>
-      {/* Middle Section */}
-      <div className={styles.middle}>
-        <div className={styles.mTop}>
-          <div className={styles.xp}>
-            <p>{texts.xp} XP</p>
-          </div>
-          <div className={styles.bp}>
-            <p>{texts.bp} BP</p>
-          </div>
-        </div>
-        <div className={styles.mBottom}>
-          <h3>{texts.devotions}</h3>
-          <Clicker />
-        </div>
-      </div>
-      {/* Right Sidebar */}
-      <div className={styles.rightBar}>
-        <div className={styles.rTop}>
-          <Buttons label='Pulls' className={styles.sideButton}/>
-        </div>
-        <div className={styles.rBottom}>
-
-        </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 

@@ -1,0 +1,39 @@
+{
+  "name": "clickthulu",
+  "version": "1.0.0",
+  "description": "MR entrypoint for Clickthulu",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend"
+  ],
+  "repository": {
+    "url": "https://github.com/johnwo90-JL/clickthulu",
+    "type": "github"
+  },
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:frontend": "npm run dev --workspace=frontend",
+    "dev:backend": "npm run dev --workspace=backend",
+    "build": "npm run build --workspace=frontend",
+    "build:frontend": "npm run build --workspace=frontend",
+    "prisma:generate": "npm run db:generate --workspace=backend",
+    "prisma:migrate": "npm run db:migrate --workspace=backend",
+    "prisma:reset": "npm run db:reset --workspace=backend",
+    "prisma:seed": "npm run db:seed --workspace=backend",
+    "prisma:studio": "npm run db:studio --workspace=backend",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
+    "start:backend": "npm run start --workspace=backend",
+    "start:frontend": "npm run preview --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend",
+    "lint:frontend": "npm run lint --workspace=frontend",
+    "clean": "npm run clean --workspaces --if-present",
+    "install:all": "npm install",
+    "test": "npm run test -w backend"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
