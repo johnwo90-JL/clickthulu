@@ -1,6 +1,6 @@
 # Clickthulu Backend
 
-Backend now includes Prisma ORM with support for both SQLite (development) and PostgreSQL (production).
+Backend now includes Prisma ORM with support for PostgreSQL.
 
 ## Quick Start
 
