@@ -17,18 +17,23 @@
     "dev:backend": "npm run dev --workspace=backend",
     "build": "npm run build --workspace=frontend",
     "build:frontend": "npm run build --workspace=frontend",
-    "start": "npm run start --workspace=backend",
+    "prisma:generate": "npm run db:generate --workspace=backend",
+    "prisma:migrate": "npm run db:migrate --workspace=backend",
+    "prisma:reset": "npm run db:reset --workspace=backend",
+    "prisma:seed": "npm run db:seed --workspace=backend",
+    "prisma:studio": "npm run db:studio --workspace=backend",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "npm run start --workspace=backend",
     "start:frontend": "npm run preview --workspace=frontend",
     "lint": "npm run lint --workspace=frontend",
     "lint:frontend": "npm run lint --workspace=frontend",
     "clean": "npm run clean --workspaces --if-present",
     "install:all": "npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "devDependencies": {
-    "concurrently": "^9.1.0"
+    "test": "npm run test -w backend"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
 }
