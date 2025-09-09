@@ -71,7 +71,7 @@
   display: flex;
   gap: 16px;
   width: max-content;
-  animation: scroll-cards 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  /* animation: scroll-cards 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; */
 }
 
 .scrollCard {
@@ -81,15 +81,4 @@
   width: 120px;
   height: 180px;
   object-fit: contain;
-}
-
-/* Juster denne for hvor langt du vil scrolle! */
-@keyframes scroll-cards {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* (kortbredde + gap) * (antall kort - synlige kort midt i view) */
-    transform: translateX(-900px); /* juster etter antall kort og bredde */
-  }
 }
