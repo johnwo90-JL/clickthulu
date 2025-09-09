@@ -81,12 +81,6 @@ function TempUpgrade({ img, name, effectClass, description }) {
 
 const upgrades = [
   {
-    name: "Fireknifev2",
-    description: "Fireknife",
-    img: "Fireknifev2.png",
-    effectClass: styles.fireknife,
-  },
-  {
     name: "UGF",
     description: "Upgrade UGF",
     img: "Ugf.png",
