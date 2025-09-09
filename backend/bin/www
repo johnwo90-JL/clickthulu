@@ -4,6 +4,10 @@
  * Module dependencies.
  */
 
+// Load environment variables
+import dotenv from "dotenv";
+dotenv.config({ path: ".env" });
+
 import app from "../app.js";
 import debug from "debug";
 import http from "http";

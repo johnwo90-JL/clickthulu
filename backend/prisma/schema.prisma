@@ -1,0 +1,269 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// // // Boring technical stuff \\ \\ \\
+
+// Refresh tokens for session management
+model RefreshToken {
+  id        String    @id @default(cuid()) /// Unique identifier for the refresh token
+  userId    String /// User that owns the refresh token
+  tokenHash String /// Hash of the refresh token
+  createdAt DateTime  @default(now()) /// Date and time the refresh token was created
+  expiresAt DateTime /// Date and time the refresh token expires
+  revokedAt DateTime? /// Date and time the refresh token was revoked
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade) /// User that owns the refresh token
+
+  @@index([userId]) /// Index for the user id
+  @@map("refreshTokens")
+}
+
+// // // User model \\ \\ \\
+
+// User model for authentication and game progress
+model User {
+  // User data
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  gameStats       GameStats[]
+  achievements    Achievement[]
+  userWorshippers Worshipper[]    @relation("WorshipperType")
+  userCards       Card[]          @relation("CardType")
+  refreshTokens   RefreshToken[]
+  gameSessions    GameSession[]
+  activationLogs  ActivationLog[]
+
+  @@map("users")
+}
+
+// Game session data
+model GameSession {
+  id                String @id @default(cuid())
+  userId            String
+  timeActiveSession Int    @default(0)
+  timeActiveTotal   Int    @default(0)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("game_sessions")
+}
+
+// Game statistics and session tracking
+model GameStats {
+  id     String @id @default(cuid())
+  userId String
+
+  // Clicks
+  clickPower      Int   @default(1)
+  totalClicks     Int   @default(0) // Clicks give devotion, but we want to track the total clicks
+  clickHistory    Json? /// Format: `{ [timestamp]: null  ... }`
+  clicksInSession Int   @default(0)
+
+  // Devotion
+  devotionPerSecond Int @default(1)
+  totalDevotion     Int @default(0)
+
+  // Level and XP
+  currentLevel    Int @default(1)
+  xp              Int @default(0)
+  nextLevelXp     Int @default(100)
+  xpPerSecond     Int @default(0)
+  clicksPerSecond Int @default(0)
+  xpPerClick      Int @default(1)
+
+  // Prestige
+  prestige      Int @default(0)
+  prestigeLevel Int @default(1)
+
+  lastCalculatedAt DateTime?
+  lastLoggedInAt   DateTime?
+  lastLoggedOutAt  DateTime?
+  lastClickAt      DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId])
+  @@map("game_stats")
+}
+
+// // // Gameplay stuff \\ \\ \\
+
+// Achievement system
+model AchievementDefinition {
+  id            String  @id @default(cuid())
+  name          String  @unique
+  description   String
+  target        Json? /// Target value to unlock achievement, format: `{ "clicks": 100, "devotion": 100, "worshippers": 100, "prestige": 100, ... }`
+  rewards       Json? /// Rewards, format: `{ "devotion": 100, "xp": 100, ... }`
+  isActive      Boolean @default(true)
+  schemaVersion Int     @default(1)
+
+  userAchievements Achievement[] @relation("UserAchievements")
+
+  @@map("achievements")
+}
+
+// User achievements (many-to-many relation)
+model Achievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  unlockedAt    DateTime @default(now()) /// Date and time the achievement was unlocked
+
+  user        User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement AchievementDefinition @relation("UserAchievements", fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId])
+  @@map("userAchievements")
+}
+
+model UpgradeEffect {
+  id        String   @id @default(cuid())
+  values    Json?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  cardLinks       CardEffect[]
+  worshipperLinks WorshipperEffect[]
+}
+
+model Worshipper {
+  id           String         @id @default(cuid())
+  userId       String
+  worshipperId String
+  count        Int            @default(1)
+  level        Int            @default(1)
+  worshipper   WorshipperType @relation("WorshipperType", fields: [worshipperId], references: [id], onDelete: Cascade)
+  user         User           @relation("WorshipperType", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@unique([userId, worshipperId])
+  @@index([worshipperId])
+  @@map("worshippers")
+}
+
+model Card {
+  id        String   @id @default(cuid())
+  userId    String
+  cardId    String
+  count     Int      @default(1)
+  level     Int      @default(1)
+  card      CardType @relation("CardType", fields: [cardId], references: [id], onDelete: Cascade)
+  user      User     @relation("CardType", fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, cardId])
+  @@index([cardId])
+  @@map("cards")
+}
+
+model WorshipperType {
+  id        String   @id @default(cuid())
+  typeId    String   @unique
+  upgrade   Upgrade? @relation("WorshipperType", fields: [typeId], references: [shortName], onDelete: Cascade)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userWorshippers Worshipper[]       @relation("WorshipperType")
+  effects         WorshipperEffect[]
+
+  @@map("worshipperPrototypes")
+}
+
+model CardType {
+  id        String   @id @default(cuid())
+  typeId    String   @unique
+  upgrade   Upgrade? @relation("CardType", fields: [typeId], references: [shortName], onDelete: Cascade)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userCards Card[]       @relation("CardType")
+  effects   CardEffect[]
+
+  @@map("cardTypes")
+}
+
+// Upgrade Prototype, used for common fields for all upgrades
+model Upgrade {
+  id          String  @id @default(cuid()) /// Unique identifier for the upgrade
+  name        String  @unique /// Name of the upgrade, used for UI
+  shortName   String  @unique /// short-name for the upgrade, e.g. `wsp_acolyte` or `crd_azathoth`
+  description String /// Description of the upgrade, used for UI
+  imgUrl      String? /// URL to the image resource, if any
+
+  requirements  Json? /// Requirements, i.e. cost, format: `{ "clickPower": { "op": "gt", "value": 10 }, "worshippers:length": { "op": "gt", "value": 10 }, "entry:wsp_acolyte" }`
+  schemaVersion Int     @default(1)
+  isActive      Boolean @default(true)
+
+  level    Int @default(1) /// The current level of the upgrade
+  maxLevel Int @default(10) /// The maximum level of the upgrade
+
+  worshipperPrototypes WorshipperType? @relation("WorshipperType")
+  cardPrototypes       CardType?       @relation("CardType")
+
+  @@map("upgrades")
+}
+
+// Explicit join tables for effects with metadata
+model CardEffect {
+  cardTypeId String
+  effectId   String
+  order      Int     @default(0)
+  minLevel   Int     @default(1)
+  isPassive  Boolean @default(true)
+
+  cardType CardType      @relation(fields: [cardTypeId], references: [id], onDelete: Cascade)
+  effect   UpgradeEffect @relation(fields: [effectId], references: [id], onDelete: Cascade)
+
+  @@id([cardTypeId, effectId])
+}
+
+model WorshipperEffect {
+  worshipperTypeId String
+  effectId         String
+  order            Int     @default(0)
+  minLevel         Int     @default(1)
+  isPassive        Boolean @default(true)
+
+  worshipperType WorshipperType @relation(fields: [worshipperTypeId], references: [id], onDelete: Cascade)
+  effect         UpgradeEffect  @relation(fields: [effectId], references: [id], onDelete: Cascade)
+
+  @@id([worshipperTypeId, effectId])
+}
+
+// Activation logging for analytics and cooldowns
+model ActivationLog {
+  id          String   @id @default(cuid())
+  userId      String
+  source      String /// 'card' | 'worshipper' | 'upgrade'
+  sourceId    String
+  level       Int
+  startedAt   DateTime @default(now())
+  durationSec Int? /// Optional for timed actives
+  cooldownSec Int? /// Optional cooldown tracking
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, source, sourceId])
+}
