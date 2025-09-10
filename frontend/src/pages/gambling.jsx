@@ -38,11 +38,13 @@ function Gambling() {
   const [scrollPos, setScrollPos] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const [canOpen, setCanOpen] = useState(true);
+  const [isDropping, setIsDropping] = useState(false);
 
   const handleOpen = () => {
     if (!canOpen) return;
     setIsOpen(true);
     setCanOpen(false);
+    setIsDropping(false);
     // Lag uendelig scroll: dupliser kortene mange ganger
     const repeated = Array(20)
       .fill(null)
@@ -72,6 +74,7 @@ function Gambling() {
     setTimeout(() => {
       setShowAnimation(false);
       setIsScrolling(false);
+      setIsDropping(true);
     }, 10000);
 
     // Tillat ny crate etter 5 sekunder
@@ -106,6 +109,7 @@ function Gambling() {
       )}
       {showAnimation && (
         <div className={styles.scrollAnimation}>
+          <div className={styles.scrollMarker}></div>
           <div
             className={styles.cardRow}
             style={{
@@ -129,14 +133,14 @@ function Gambling() {
         </div>
       )}
       {!showAnimation && winner && (
-        <div style={{ marginTop: "32px", textAlign: "center" }}>
+        <div style={{ marginTop: "32px", textAlign: "center", minHeight: "250px" }}>
           <h3>Du vant:</h3>
           {(() => {
             let rarity = "common";
             if (winner.includes("epic")) rarity = "epic";
             else if (winner.includes("uncommon")) rarity = "uncommon";
             return (
-              <div className={`${cardStyles.cardItem} ${cardStyles[rarity]}`}>
+              <div className={`${cardStyles.cardItem} ${cardStyles[rarity]} ${isDropping ? styles.dropCard : ''}`}>
                 <img
                   src={`${base_url}/${winner}`}
                   alt={winner}
