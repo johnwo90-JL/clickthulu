@@ -9,7 +9,7 @@ import { base_url as base } from "../../config";
 import App from "../App.jsx";
 import Home from "../pages/home";
 import Game from "../pages/game";
-import RegisterAndLogin from "../pages/register&login";
+import RegisterAndLogin from "../pages/registerandlogin";
 import Cards from "../pages/cards.jsx";
 import Gambling from "../pages/gambling";
 import TempUpgrades from "../pages/tempug.jsx";

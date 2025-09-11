@@ -9,6 +9,7 @@ import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./lib/swagger.js";
 import prisma, { disconnectPrisma } from "./lib/prisma.js";
 import indexRouter from "./routes/index.js";
+import cors from "cors";
 
 // Define __dirname for ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -18,6 +19,8 @@ const __dirname = path.dirname(__filename);
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
 var app = express();
+
+app.use(cors());
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

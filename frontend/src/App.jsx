@@ -7,7 +7,7 @@ function App() {
 
   return (
     <>
-      {!hideNav && (
+      {/* {!hideNav && (
         <nav style={{ margin: "24px" }}>
           <Link to="/cards" style={{ marginRight: "16px" }}>
             Kort
@@ -23,7 +23,7 @@ function App() {
           </Link>
           <Link to="/background">Bakgrunn</Link>
         </nav>
-      )}
+      )} */}
       <Outlet />
     </>
   );
