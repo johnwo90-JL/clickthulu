@@ -2,13 +2,38 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60px;
+  min-height: 100vh;
   position: relative;
+  padding-top: 40px;
+  justify-content: flex-start;
+  background: none;
+}
+
+.crateBackground {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  background: radial-gradient(
+    circle at 50% 30%,
+    #fffbe6 0%,
+    #c49000 60%,
+    #a67c00 100%
+  );
 }
 
 .crateAnimation {
-  margin: 132px 0;
+  margin: 0;
   z-index: 2;
+  position: relative; /* Endret fra absolute til relative */
+  top: 0;
+  left: 0;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .crateBox {
@@ -30,7 +55,7 @@
   border-radius: 8px;
   cursor: pointer;
   margin-top: 16px;
-  transition: background 0.s;
+  transition: background 0s;
   z-index: 2;
 }
 
@@ -40,10 +65,12 @@
 
 .crateImg {
   transition: transform 0.5s;
+  width: 260px !important;
+  height: 260px !important;
 }
 
 .open {
-  transform: scale(1.1) rotate(-0deg);
+  transform: scale(1.18) rotate(-0deg);
 }
 
 .closed {
@@ -52,35 +79,36 @@
 
 /* Case opening animation */
 .scrollAnimation {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px;
-  height: 200px;
+  position: relative;
+  margin: 0 auto;
+  width: 900px;
+  height: 320px;
   overflow: hidden;
   pointer-events: none;
   z-index: 5;
-  background: none;
-  border: 2px solid #695c23;
-  border-radius: 16px;
-  box-shadow: 0 4px 32px rgba(255, 2, 2, 0.667);
+  background: rgba(255, 255, 230, 0.7);
+  border: 3px solid #000000;
+  border-radius: 24px;
+  box-shadow: 0 8px 48px rgba(255, 2, 2, 0.18);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .cardRow {
   display: flex;
-  gap: 16px;
-  width: max-content;
-  /* animation: scroll-cards 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; */
-  
+  gap: 32px;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 .scrollCard {
-  border-radius: 8px;
-  box-shadow: 0 2px 4px #0006;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px #0006;
   background: none;
-  width: 120px;
-  height: 180px;
+  width: 180px;
+  height: 270px;
   object-fit: contain;
 }
 
@@ -109,10 +137,10 @@
   left: 50%;
   transform: translateX(-50%);
   height: 100%;
-  width: 4px;
+  width: 8px;
   background: linear-gradient(180deg, #fff 0%, #b9b181 50%, #fff 100%);
-  border-radius: 2px;
+  border-radius: 4px;
   z-index: 10;
-  box-shadow: 0 0 8px #ffd700;
+  box-shadow: 0 0 16px #ffd700;
   pointer-events: none;
 }
