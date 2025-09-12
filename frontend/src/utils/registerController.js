@@ -13,7 +13,8 @@ const createUser = async (postdata) => {
       if (!response.ok) {
         throw new Error(response.status);
       }
-      console.log(response);
+      const responseData = await response.json();
+      console.log(responseData.data);
     } catch (error) {
       throw new Error(error.message);
     }

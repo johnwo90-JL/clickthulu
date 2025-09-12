@@ -21,6 +21,7 @@ const Game = () => {
   // Makes it easier to keep passive income and active abilities instanced without doing a bunch of backend voodoo to keep shit going when in a different "window".
   // Also allows for a complete frontend solution with localstorage for testing purposes and "offline" play.
   // Think this also keeps the entire game in memory so when the slightly longer load time is done it should hopefully be more optimised?
+  // Needs to be reworked a bit so it's all "loaded" but conditionally visible through CSS display logic.
 
   // Menu Flags for conditional HTML rendering. Try to keep only have one set as "true" at a time.
   // Game page. Main game window with links to other pages.
@@ -108,7 +109,15 @@ const Game = () => {
                 }}
               />
             </div>
-            <div className={styles.rBottom}>Placeholder</div>
+            <div
+              className={styles.rBottom}
+              onClick={() => {
+                setGamePage(!gamePage);
+                setWorshipperPage(!worshipperPage);
+              }}
+            >
+              Placeholder
+            </div>
           </div>
         </div>
       )}
@@ -116,7 +125,11 @@ const Game = () => {
       {storePage && <StoreGame />}
       {settingsPage && <SettingsGame />}
       {pullsPage && <PullsGame />}
-      {worshipperPage && <WorshippersGame />}
+      {worshipperPage && (
+        <WorshippersGame
+          data={{ gamePage, setGamePage, worshipperPage, setWorshipperPage }}
+        />
+      )}
       {upgradePage && <UpgradesGame />}
     </>
   );

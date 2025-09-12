@@ -13,11 +13,12 @@ const loginUser = async (postdata) => {
       if (!response.ok) {
         throw new Error(response.status);
       }
+      const responseData = await response.json();
       window.cookieStore.set(
         "Authorisation",
-        `Bearer ${response.body.accessToken}`
+        `Bearer ${responseData.data.accessToken}`
       );
-      console.log(response);
+      console.log(responseData.data);
     } catch (error) {
       throw new Error(error.message);
     }
