@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styles from "../styles/gambling.module.css";
 import cardStyles from "../styles/card.module.css";
 import { base_url } from "../../config";
@@ -6,7 +6,6 @@ import { cardNames } from "../utils/cardList";
 
 // Konstanter for animasjon og scroll
 const SCROLL_CARD_WIDTH = 136;
-const SCROLL_OFFSET = 240;
 const ANIMATION_TIME = 10000; // ms
 const COOLDOWN_TIME = 15000; // ms
 const ADS = [
@@ -14,7 +13,6 @@ const ADS = [
   "/clickhulu/ads/saul.mp4",
   "/clickhulu/ads/doritos.mp4",
   "/clickhulu/ads/3ms.mp4",
-  // Legg til flere ads her
 ];
 
 function shuffle(array) {
@@ -55,8 +53,12 @@ function Gambling() {
   const [adLoading, setAdLoading] = useState(false);
   const [cooldownLeft, setCooldownLeft] = useState(0);
 
-  // Reset all state to start
-  const resetState = () => {
+  // Timeout refs for cleanup
+  const timeouts = useRef([]);
+  const containerRef = useRef(); // Ny ref for scrollAnimation-container
+
+  // Full reset (alt til start)
+  const resetAll = () => {
     setIsOpen(false);
     setCanOpen(true);
     setWinner(null);
@@ -71,7 +73,22 @@ function Gambling() {
     setAdLoading(false);
   };
 
-  // Cooldown-timer: reset kun hvis vinner er synlig og ingen ad vises
+  // Reset kun for nytt spill (beholder canOpen=false)
+  const resetForNewGame = () => {
+    setIsOpen(false);
+    setWinner(null);
+    setWinnerIdx(null);
+    setShuffledCards([]);
+    setScrollPos(0);
+    setIsScrolling(false);
+    setIsDropping(false);
+    setShowAd(false);
+    setCurrentAd(null);
+    setAdError(false);
+    setAdLoading(false);
+  };
+
+  // Cooldown-timer
   useEffect(() => {
     let timerId;
     if (winner && !showAnimation && !showAd) {
@@ -86,7 +103,7 @@ function Gambling() {
         });
       }, 1000);
       const timeoutId = setTimeout(() => {
-        resetState();
+        resetAll();
       }, COOLDOWN_TIME);
       return () => {
         clearTimeout(timeoutId);
@@ -97,43 +114,58 @@ function Gambling() {
     }
   }, [winner, showAnimation, showAd]);
 
+  // Cleanup for timeouts når komponenten unmountes
+  useEffect(() => {
+    return () => {
+      timeouts.current.forEach((t) => clearTimeout(t));
+    };
+  }, []);
+
   // Hovedfunksjon for å åpne kista
   const handleOpen = () => {
     if (!canOpen) return;
-    resetState();
+    resetForNewGame();
     setIsOpen(true);
     setCanOpen(false);
-    // Lag uendelig scroll: dupliser kortene mange ganger
-    const repeated = Array(20)
-      .fill(null)
-      .flatMap(() => shuffle(cardNames));
-    setShuffledCards(repeated);
+
     // Velg vinner
     const winnerCard = pickWinnerCard(cardNames);
-    setWinner(winnerCard);
-    // Finn første index av vinnerkortet i midten
-    const middleStart = Math.floor(repeated.length / 2);
-    const idx = repeated.indexOf(winnerCard, middleStart);
-    setWinnerIdx(idx);
+
+    // Lag spinner-array med kun unike kort
+    const uniqueCards = Array.from(new Set(cardNames));
+    const spinner = Array(20)
+      .fill(null)
+      .flatMap(() => shuffle(uniqueCards));
+
+    // Sett vinnerkortet i midten
+    const middleIdx = Math.floor(spinner.length / 2);
+    spinner[middleIdx] = winnerCard;
+
+    setWinnerIdx(middleIdx);
+    setShuffledCards(spinner);
     setShowAnimation(true);
+
     // Start animasjon
-    setTimeout(() => {
-      setIsScrolling(true);
-      setScrollPos(idx * SCROLL_CARD_WIDTH - SCROLL_OFFSET);
-    }, 50);
+    timeouts.current.push(
+      setTimeout(() => {
+        setIsScrolling(true);
+        const containerWidth = containerRef.current
+          ? containerRef.current.offsetWidth
+          : 900;
+        const scrollOffset = containerWidth / 2 - SCROLL_CARD_WIDTH / 2;
+        setScrollPos(middleIdx * SCROLL_CARD_WIDTH - scrollOffset);
+      }, 50)
+    );
+
     // Ferdig etter animasjon
-    setTimeout(() => {
-      setShowAnimation(false);
-      setIsScrolling(false);
-      setIsDropping(true);
-      // 50% sjanse for reklame
-      if (Math.random() < 0.9 && ADS.length > 0) {
-        setCurrentAd(ADS[Math.floor(Math.random() * ADS.length)]);
-        setShowAd(true);
-        setAdLoading(true);
-        setAdError(false);
-      }
-    }, ANIMATION_TIME);
+    timeouts.current.push(
+      setTimeout(() => {
+        setShowAnimation(false);
+        setIsScrolling(false);
+        setIsDropping(true);
+        setCanOpen(true); // Ad er deaktivert
+      }, ANIMATION_TIME)
+    );
   };
 
   // Responsiv video-style
@@ -175,7 +207,7 @@ function Gambling() {
           />
         </div>
         {showAnimation && (
-          <div className={styles.scrollAnimation}>
+          <div className={styles.scrollAnimation} ref={containerRef}>
             <div className={styles.scrollMarker}></div>
             <div
               className={styles.cardRow}
@@ -190,72 +222,77 @@ function Gambling() {
             >
               {shuffledCards.map((name, idx) => (
                 <img
-                  key={idx}
+                  key={`${name}-${idx}`}
                   src={`${base_url}/${name}`}
-                  alt={name}
+                  alt={`Kort: ${name.replace(".png", "")}`}
                   className={styles.scrollCard}
-                  width={180}
-                  height={270}
-                  aria-label={`Kort: ${name}`}
+                  width={SCROLL_CARD_WIDTH}
+                  height={SCROLL_CARD_WIDTH * 1.5}
                 />
               ))}
             </div>
           </div>
         )}
       </div>
+
       {/* Vinnerkort og ad-overlay */}
-      {!showAnimation && winner && !showAd && (
-        <div
-          style={{
-            marginTop: "32px",
-            minHeight: "250px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            textAlign: "center",
-            marginBottom: "48px", // Ekstra plass under vinnerkortet
-          }}
-        >
-          <h3>Du vant:</h3>
-          {(() => {
-            let rarity = "common";
-            if (winner.includes("epic")) rarity = "epic";
-            else if (winner.includes("uncommon")) rarity = "uncommon";
-            return (
-              <div
-                className={`${cardStyles.cardItem} ${cardStyles[rarity]} ${
-                  isDropping ? styles.dropCard : ""
-                }`}
-                style={{ marginBottom: canOpen ? "24px" : "0" }}
-              >
-                <img
-                  src={`${base_url}/${winner}`}
-                  alt={winner}
-                  width={150}
-                  height={225}
-                  aria-label={`Vinnerkort: ${winner}`}
-                />
-              </div>
-            );
-          })()}
-          <p>{winner.replace(".png", "")}</p>
-        </div>
-      )}
-      {/* Cooldown-timer vises alltid når cooldown er aktiv og vinner finnes */}
+      {!showAnimation &&
+        shuffledCards.length > 0 &&
+        winnerIdx !== null &&
+        !showAd && (
+          <div
+            style={{
+              marginTop: "32px",
+              minHeight: "250px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center",
+              marginBottom: "48px",
+            }}
+          >
+            <h3>Du vant:</h3>
+            {(() => {
+              const actualWinner = shuffledCards[winnerIdx];
+              let rarity = "common";
+              if (actualWinner.includes("epic")) rarity = "epic";
+              else if (actualWinner.includes("uncommon")) rarity = "uncommon";
+              return (
+                <div
+                  className={`${cardStyles.cardItem} ${cardStyles[rarity]} ${
+                    isDropping ? styles.dropCard : ""
+                  }`}
+                  style={{ marginBottom: canOpen ? "24px" : "0" }}
+                >
+                  <img
+                    src={`${base_url}/${actualWinner}`}
+                    alt={`Vinnerkort: ${actualWinner.replace(".png", "")}`}
+                    width={150}
+                    height={225}
+                  />
+                </div>
+              );
+            })()}
+            <p>{shuffledCards[winnerIdx].replace(".png", "")}</p>
+          </div>
+        )}
+
+      {/* Cooldown-timer */}
       {!showAnimation && winner && cooldownLeft > 0 && (
         <div
           style={{
             marginBottom: "24px",
             color: "#000000",
             fontWeight: "bold",
-            fontSize: "2.2rem",
+            fontSize: "1.3rem",
           }}
         >
           Cooldown: {cooldownLeft}s
         </div>
       )}
-      {/* Åpne-knapp kun når cooldown er ferdig og ikke ad vises */}
+
+      {/* Åpne-knapp */}
       {!isOpen && canOpen && cooldownLeft === 0 && !showAd && (
         <button
           className={styles.crateOpenBtn}
@@ -266,6 +303,7 @@ function Gambling() {
           Åpne kiste
         </button>
       )}
+
       {/* Ad-overlay */}
       {showAd && (
         <div
@@ -308,7 +346,7 @@ function Gambling() {
                 setCurrentAd(null);
                 setAdError(false);
                 setAdLoading(false);
-                setCanOpen(true); // Vis åpne-knapp igjen
+                setCanOpen(true);
               }}
             />
           )}

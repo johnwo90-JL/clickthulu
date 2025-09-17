@@ -18,8 +18,8 @@
   z-index: -1;
   background: radial-gradient(
     circle at 50% 30%,
-    #fffbe6 0%,
-    #c49000 60%,
+    #444235 0%,
+    #bd9423 60%,
     #a67c00 100%
   );
 }
@@ -47,6 +47,7 @@
 }
 
 .crateOpenBtn {
+  position: relative;
   padding: 12px 32px;
   font-size: 1.2rem;
   background: #a67c00;
